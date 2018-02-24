@@ -4,15 +4,27 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start:bot": "node index.js",
+    "dev:bot": "nodemon index.js",
+    "dev:parser": "nodemon ./parser/index.js",
+    "start:bot": "node ./bot/index.js",
     "start:parser": "node ./parser/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "node_modules/*"
+    ],
+    "delay": "2500"
   },
   "author": "pasajero_0",
   "license": "ISC",
   "dependencies": {
     "jsdom": "^11.6.2",
+    "moment": "^2.20.1",
     "needle": "^2.1.2",
     "node-telegram-bot-api": "^0.30.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.15.1"
   }
 }

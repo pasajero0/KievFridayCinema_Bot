@@ -32,21 +32,16 @@ const getContent = (information) => {
 	});
 };
 
-const getFilmData = () => {	
-	return needle('get', URL).then(function(data){
-		const mltplxBody = new JSDOM(data.body);
-		const mltplx = mltplxBody.window.document;
-		const information_list = mltplx.querySelectorAll('.cinema_inside[data-date="' + getDate() + '"] div.film');
-		const information = Array.prototype.slice.call(information_list);
-		return {
-			date: new Date(),
-			content: getContent(information)
-		};
-	});
+const getFilmData = async () => {	
+	const data = await needle('get', URL);
+	const mltplxBody = new JSDOM(data.body);
+	const mltplx = mltplxBody.window.document;
+	const information_list = mltplx.querySelectorAll('.cinema_inside[data-date="' + getDate() + '"] div.film');
+	const information = Array.prototype.slice.call(information_list);
+	return {
+		date: new Date(),
+		content: getContent(information)
+	};
 }
-
-getFilmData().then((res)=>{
-	console.log(`CinemaData ====> ${JSON.stringify(res)}`);
-});
 
 module.exports = getFilmData;
