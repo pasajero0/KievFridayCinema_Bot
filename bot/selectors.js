@@ -1,6 +1,16 @@
 
+const getFilmData = require('../parser');
 
+const _getFilmList = () => {
+  const seanses = {};
+  return async (id) => {
+    if (!seanses[id]) {
+      seanses[id] = await getFilmData();
+    }
+    return seanses[id];
+  }
+}
 
-modeles.export = {
-
+module.exports = {
+  _getFilmList,
 }

@@ -1,5 +1,5 @@
 const TelegramBot = require('node-telegram-bot-api');
-const getFilmData = require('../parser');
+const { _getFilmList } = require('./selectors');
 
 const token = '525352673:AAH6g3UmtJVhOGTbgCShoU_WdRVrRXbJM7Q';
 
@@ -8,7 +8,7 @@ const getFilmDate = () => {
   const day = date.toLocaleString('en', { day: '2-digit' });
   const month = date.toLocaleString('en', { month: '2-digit' });
   const year = date.toLocaleString('en', { year: 'numeric' });
-  return [day, month, year].join('.');
+  return [day, month, year];
 }
 
 const getFormatedFilms = (films) => {
@@ -20,14 +20,14 @@ const getFormatedFilms = (films) => {
 
 const InitBot = () => {
   const bot = new TelegramBot(token, { polling: true });
-
+  const getFilmList = _getFilmList();
 
   bot.onText(/\/gettodayfilm/, async (msg, match) => {
     const chatId = msg.chat.id;
-    const firstText = `Здравствуйте, дамы и господа!\nСегодня *${getFilmDate()}*.\nЧерез пару секунд вы получите список фильмов, которые находятся в прокате.\nОжидайте... `;
+    const firstText = `Здравствуйте, дамы и господа!\nСегодня *${getFilmDate().join('.')}*.\nЧерез пару секунд вы получите список фильмов, которые находятся в прокате.\nОжидайте... `;
     bot.sendMessage(chatId, firstText, { parse_mode: 'Markdown' });
 
-    const res = await getFilmData()
+    const res = await getFilmList(getFilmDate().join(''))
     const str = `В прокате кинотеатра Multiplex присутствуют следующие фильмы:${getFormatedFilms(res.content)} `
     bot.sendMessage(chatId, str, { parse_mode: 'Markdown' });
   })
@@ -37,9 +37,9 @@ const InitBot = () => {
     const chatId = msg.chat.id;
     bot.sendMessage(chatId, 'Получаем список фильмов. Ожидайте...');
 
-    const res = await getFilmData()
+    const res = await getFilmList(getFilmDate().join(''))
     const str = `
-    Сегодня ${getFilmDate(res.date)}
+    Сегодня ${getFilmDate(res.date).join('.')}
     \nВ прокате кинотеатра Multiplex присутствуют следующие фильмы:
     `
     // ${getFormatedFilms(res.content)}
@@ -58,7 +58,6 @@ const InitBot = () => {
         })
       });
     });
-
   })
 
 
