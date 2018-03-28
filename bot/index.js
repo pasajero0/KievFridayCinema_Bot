@@ -1,5 +1,6 @@
 const TelegramBot = require('node-telegram-bot-api');
 const { _getFilmList } = require('./selectors');
+const moment = require('moment');
 
 const token = '525352673:AAH6g3UmtJVhOGTbgCShoU_WdRVrRXbJM7Q';
 
@@ -10,6 +11,15 @@ const getFilmDate = () => {
   const year = date.toLocaleString('en', { year: 'numeric' });
   return [day, month, year];
 }
+
+/////////////////////////////////////////////////////////////////////////////////
+const getDate = moment();
+
+const getThisOrNextFriday = () => {
+  let thisFriday = moment().day(5);
+  return moment().isSameOrBefore(thisFriday) ? thisFriday : moment().day(12);
+};
+/////////////////////////////////////////////////////////////////////////////////
 
 const getFormatedFilms = (films) => {
   const strArray = films.map((val)=>{
@@ -22,13 +32,13 @@ const InitBot = () => {
   const bot = new TelegramBot(token, { polling: true });
   const getFilmList = _getFilmList();
 
-  bot.onText(/\/gettodayfilm/, async (msg, match) => {
+  bot.onText(/\/today/, async (msg, match) => {
     const chatId = msg.chat.id;
-    const firstText = `Здравствуйте, дамы и господа!\nСегодня *${getFilmDate().join('.')}*.\nЧерез пару секунд вы получите список фильмов, которые находятся в прокате.\nОжидайте... `;
+    const firstText = `Здравствуйте, дамы и господа!\nСегодня *${getDate.format('DD.MM.YYYY')}*.\nСпустя миг мы получим список фильмов находящихся в прокате.\nОжидайте... `;
     bot.sendMessage(chatId, firstText, { parse_mode: 'Markdown' });
 
-    const res = await getFilmList(getFilmDate().join(''))
-    const str = `В прокате кинотеатра Multiplex присутствуют следующие фильмы:${getFormatedFilms(res.content)} `
+    const res = await getFilmList(getDate.format('DDMMYYYY'))
+    const str = `В прокате кинотеатра Multiplex представлены следующие фильмы:${getFormatedFilms(res.content)} `
     bot.sendMessage(chatId, str, { parse_mode: 'Markdown' });
   })
 
@@ -67,12 +77,12 @@ const InitBot = () => {
   });
 
 
-  bot.onText(/\/getfilmsbyfriday/, (msg, match) => {
+  bot.onText(/\/friday/, (msg, match) => {
     const chatId = msg.chat.id;
     bot.sendMessage(chatId, 'Скоро мы сможем предоставить вам информацию по сеансам за следующую пятницу.');
   });
 
-  console.log('>>>>>>>>>>Bot started<<<<<<<<<<')
+  console.log('>>>>>>>>>> bot    is activated <<<<<<<<<<')
 };
 
 module.exports = InitBot;
