@@ -13,11 +13,11 @@ const getFilmDate = () => {
 }
 
 /////////////////////////////////////////////////////////////////////////////////
-const getDate = moment();
+const currentDate = moment();
 
 const getThisOrNextFriday = () => {
   let thisFriday = moment().day(5);
-  return moment().isSameOrBefore(thisFriday) ? thisFriday : moment().day(12);
+  return currentDate.isSameOrBefore(thisFriday) ? thisFriday : moment().day(12);
 };
 /////////////////////////////////////////////////////////////////////////////////
 
@@ -82,7 +82,7 @@ const InitBot = () => {
     bot.sendMessage(chatId, 'Скоро мы сможем предоставить вам информацию по сеансам за следующую пятницу.');
   });
 
-  console.log('>>>>>>>>>> bot    is activated <<<<<<<<<<')
+  console.log('>>>>>>>>>> bot is activated <<<<<<<<<<')
 };
 
 module.exports = InitBot;

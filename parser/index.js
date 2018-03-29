@@ -38,6 +38,4 @@ const getFilmData = async (date) => {
 	};
 }
 
-console.log('>>>>>>>>>> parser is activated <<<<<<<<<<');
-
 module.exports = getFilmData;
