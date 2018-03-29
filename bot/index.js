@@ -1,13 +1,12 @@
 const bot = require('./bot');
 const { getFilmList } = require('./selectors');
+const moment = require('moment');
+const currentDate = moment();
 
-const getFilmDate = () => {
-  const date = new Date();
-  const day = date.toLocaleString('en', { day: '2-digit' });
-  const month = date.toLocaleString('en', { month: '2-digit' });
-  const year = date.toLocaleString('en', { year: 'numeric' });
-  return [day, month, year];
-}
+const getThisOrNextFriday = () => {
+  let thisFriday = moment().day(5);
+  return currentDate.isSameOrBefore(thisFriday) ? thisFriday : moment().day(12);
+};
 
 const getFormatedFilms = (films) => {
   const strArray = films.map((val)=>{
@@ -16,21 +15,26 @@ const getFormatedFilms = (films) => {
   return strArray.join('')
 }
 
-bot.onText(/\/gettodayfilm/, async (msg, match) => {
+bot.onText(/\/today/, async (msg, match) => {
   const chatId = msg.chat.id;
-  const firstText = `Здравствуйте, дамы и господа!\nСегодня *${getFilmDate().join('.')}*.\nЧерез пару секунд вы получите список фильмов, которые находятся в прокате.\nОжидайте... `;
+  const firstText = `Здравствуйте, дамы и господа!\nСегодня *${currentDate.format('DD.MM.YYYY')}*.\nСпустя миг мы получим список фильмов находящихся в прокате.\nОжидайте... `;
   bot.sendMessage(chatId, firstText, { parse_mode: 'Markdown' });
 
-  const res = await getFilmList(getFilmDate().join(''))
-  const str = `В прокате кинотеатра Multiplex присутствуют следующие фильмы:${getFormatedFilms(res.content)} `
+  const res = await getFilmList(currentDate);
+  const str = `В прокате кинотеатра Multiplex представлены следующие фильмы:${getFormatedFilms(res.content)} `;
   bot.sendMessage(chatId, str, { parse_mode: 'Markdown' });
 })
 
-bot.onText(/\/getfilmsbyfriday/, (msg, match) => {
+bot.onText(/\/friday/, async (msg, match) => {
   const chatId = msg.chat.id;
-  bot.sendMessage(chatId, 'Скоро мы сможем предоставить вам информацию по сеансам за следующую пятницу.111');
-});
+  const fridayDate = getThisOrNextFriday();
+  bot.sendMessage(chatId, '!!!!НАКОНЕЦ-ТО ДОЖДАЛИСЬ!!!!');
+  const firstText = `Здравствуйте, дамы и господа!\nПятница *${fridayDate.format('DD.MM.YYYY')}*.\nСпустя миг мы получим список фильмов находящихся в прокате.\nОжидайте... `;
+  bot.sendMessage(chatId, firstText, { parse_mode: 'Markdown' });
 
-if (process.env.NODE_ENV !== 'production') require('./testsReq');
+  const res = await getFilmList(fridayDate);
+  const str = `В прокате кинотеатра Multiplex, в пятницу, представлены следующие фильмы:${getFormatedFilms(res.content)} `;
+  bot.sendMessage(chatId, str, { parse_mode: 'Markdown' });
+});
 
 console.log('>>>>>>>>>>Bot started<<<<<<<<<<')
