@@ -12,5 +12,5 @@ const _getFilmList = () => {
 }
 
 module.exports = {
-  _getFilmList,
+  getFilmList: _getFilmList(),
 }

@@ -45,3 +45,11 @@ const getFilmData = async () => {
 }
 
 module.exports = getFilmData;
+
+if (!module.parent) {
+	getFilmData().then((res)=> {
+		console.log('>>>>>>>>>> Parser is runing<<<<<<<<<<');
+		console.log('Result: \n', res);
+	});
+}
+
