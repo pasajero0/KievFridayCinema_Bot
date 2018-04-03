@@ -1,6 +1,5 @@
 const needle = require('needle');
 const { JSDOM } = require('jsdom');
-const moment = require('moment');
 const URL = 'https://multiplex.ua/cinema/kyiv/prospect';
 
 const getSeance = (film) => {
@@ -26,16 +25,25 @@ const getContent = (information) => {
 	});
 };
 
-const getFilmData = async (date) => {	
+const getFilmData = async (date) => {
 	const data = await needle('get', URL);
 	const mltplxBody = new JSDOM(data.body);
 	const mltplx = mltplxBody.window.document;
 	const information_list = mltplx.querySelectorAll('.cinema_inside[data-date="' + date.format('DDMMYYYY') + '"] div.film');
 	const information = Array.prototype.slice.call(information_list);
 	return {
-		date: new Date(),
+		date,
 		content: getContent(information)
 	};
 }
 
 module.exports = getFilmData;
+
+if (!module.parent) {
+	const moment = require('moment');
+	getFilmData(moment()).then((res)=> {
+		console.log('>>>>>>>>>> Parser is runing<<<<<<<<<<');
+		console.log('Result: \n', res);
+	});
+}
+

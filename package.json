@@ -6,7 +6,7 @@
   "scripts": {
     "dev:bot": "nodemon index.js",
     "dev:parser": "nodemon ./parser/index.js",
-    "start:bot": "node ./bot/index.js",
+    "start:bot": "node index.js",
     "start:parser": "node ./parser/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -18,6 +18,9 @@
   },
   "author": "pasajero_0",
   "license": "ISC",
+  "engines": {
+    "node": "8.9.4"
+  },
   "dependencies": {
     "jsdom": "^11.6.2",
     "moment": "^2.20.1",

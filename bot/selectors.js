@@ -5,12 +5,12 @@ const _getFilmList = () => {
   const seanses = {};
   return async (id) => {
     if (!seanses[id]) {
-      seanses[id] = await getFilmData();
+      seanses[id] = await getFilmData(id);
     }
     return seanses[id];
   }
 }
 
 module.exports = {
-  _getFilmList,
+  getFilmList: _getFilmList(),
 }
