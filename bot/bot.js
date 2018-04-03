@@ -1,6 +1,6 @@
 const TelegramBot = require('node-telegram-bot-api');
 
-const TOKEN = process.env.HEROKU_APP_TOKEN || '525352673:AAH6g3UmtJVhOGTbgCShoU_WdRVrRXbJM7Q';
+const TOKEN = process.env.HEROKU_APP_TOKEN || '584024427:AAFgbTw2Y0Z1P-YA3_cF3iy0k_mi-Gw3jNQ';
 
 const HEROKU_APP_NAME = process.env.HEROKU_APP_NAME;
 

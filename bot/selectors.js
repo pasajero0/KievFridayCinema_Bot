@@ -11,6 +11,9 @@ const _getFilmList = () => {
   }
 }
 
+const afterEleven = (seanses) => seanses;
+
 module.exports = {
   getFilmList: _getFilmList(),
+  afterEleven,
 }
