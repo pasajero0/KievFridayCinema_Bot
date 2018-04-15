@@ -1,5 +1,5 @@
 const bot = require('./bot');
-const { getFilmList } = require('./selectors');
+const { getFilmList, afterEleven } = require('./selectors');
 const moment = require('moment');
 const currentDate = moment();
 
@@ -17,7 +17,7 @@ const getFormatedFilms = (films) => {
 
 bot.onText(/\/today/, async (msg, match) => {
   const chatId = msg.chat.id;
-  const firstText = `Здравствуйте, дамы и господа!\nСегодня *${currentDate.format('DD.MM.YYYY')}*.\nСпустя миг мы получим список фильмов находящихся в прокате.\nОжидайте... `;
+  const firstText = `Здравствуйте, дамы и господа!\nСегодня *${currentDate.format('DD.MM.YYYY')}*.\nСпустя миг мы получим список фильмов, которые находятся в прокате.\nОжидайте... `;
   bot.sendMessage(chatId, firstText, { parse_mode: 'Markdown' });
 
   const res = await getFilmList(currentDate);
@@ -28,12 +28,11 @@ bot.onText(/\/today/, async (msg, match) => {
 bot.onText(/\/friday/, async (msg, match) => {
   const chatId = msg.chat.id;
   const fridayDate = getThisOrNextFriday();
-  bot.sendMessage(chatId, '!!!!НАКОНЕЦ-ТО ДОЖДАЛИСЬ!!!!');
-  const firstText = `Здравствуйте, дамы и господа!\nПятница *${fridayDate.format('DD.MM.YYYY')}*.\nСпустя миг мы получим список фильмов находящихся в прокате.\nОжидайте... `;
+  const firstText = `Здравствуйте, дамы и господа!\nПятница *${fridayDate.format('DD.MM.YYYY')}*.\nСпустя миг мы получим список фильмов, которые находятся в прокате.\nОжидайте... `;
   bot.sendMessage(chatId, firstText, { parse_mode: 'Markdown' });
 
   const res = await getFilmList(fridayDate);
-  const str = `В прокате кинотеатра Multiplex, в пятницу, представлены следующие фильмы:${getFormatedFilms(res.content)} `;
+  const str = `В прокате кинотеатра Multiplex, в пятницу, представлены следующие фильмы:${getFormatedFilms(afterEleven(res.content))} `;
   bot.sendMessage(chatId, str, { parse_mode: 'Markdown' });
 });
 
