@@ -17,7 +17,7 @@ const getFormatedFilms = (films) => {
 
 bot.onText(/\/today/, async (msg, match) => {
   const chatId = msg.chat.id;
-  const firstText = `Здравствуйте, дамы и господа!\nСегодня *${currentDate.format('DD.MM.YYYY')}*.\nСпустя миг мы получим список фильмов находящихся в прокате.\nОжидайте... `;
+  const firstText = `Здравствуйте, дамы и господа!\nСегодня *${currentDate.format('DD.MM.YYYY')}*.\nСпустя миг мы получим список фильмов, которые находятся в прокате.\nОжидайте... `;
   bot.sendMessage(chatId, firstText, { parse_mode: 'Markdown' });
 
   const res = await getFilmList(currentDate);
@@ -28,7 +28,7 @@ bot.onText(/\/today/, async (msg, match) => {
 bot.onText(/\/friday/, async (msg, match) => {
   const chatId = msg.chat.id;
   const fridayDate = getThisOrNextFriday();
-  const firstText = `Здравствуйте, дамы и господа!\nПятница *${fridayDate.format('DD.MM.YYYY')}*.\nСпустя миг мы получим список фильмов находящихся в прокате.\nОжидайте... `;
+  const firstText = `Здравствуйте, дамы и господа!\nПятница *${fridayDate.format('DD.MM.YYYY')}*.\nСпустя миг мы получим список фильмов, которые находятся в прокате.\nОжидайте... `;
   bot.sendMessage(chatId, firstText, { parse_mode: 'Markdown' });
 
   const res = await getFilmList(fridayDate);
