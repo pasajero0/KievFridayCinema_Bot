@@ -1,10 +1,10 @@
 const bot = require('./bot');
 const { getFilmList, afterEleven } = require('./selectors');
 const moment = require('moment');
-const currentDate = moment();
+const currentDate = moment().utcOffset("+03:00");
 
 const getThisOrNextFriday = () => {
-  let thisFriday = moment().day(5);
+  let thisFriday = moment().utcOffset("+03:00").day(5);
   return currentDate.isSameOrBefore(thisFriday) ? thisFriday : moment().day(12);
 };
 
@@ -36,4 +36,6 @@ bot.onText(/\/friday/, async (msg, match) => {
   bot.sendMessage(chatId, str, { parse_mode: 'Markdown' });
 });
 
+console.log('>>>>>>>>>>Bot started<<<<<<<<<<')
+console.log('currentDate', currentDate)
 console.log('>>>>>>>>>>Bot started<<<<<<<<<<')
