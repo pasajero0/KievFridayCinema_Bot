@@ -21,7 +21,12 @@ bot.onText(/\/today/, async (msg, match) => {
   bot.sendMessage(chatId, firstText, { parse_mode: 'Markdown' });
 
   const res = await getFilmList(currentDate);
-  const str = `В прокате кинотеатра Multiplex представлены следующие фильмы:${getFormatedFilms(res.content)} `;
+
+  if (((res || {}).content || []).length) {
+    str = `В прокате кинотеатра Multiplex представлены следующие фильмы:${getFormatedFilms(res.content)}`;
+  } else {
+    str = `В данный момент список фильмов не доступен😕`;
+  }
   bot.sendMessage(chatId, str, { parse_mode: 'Markdown' });
 })
 
@@ -32,10 +37,13 @@ bot.onText(/\/friday/, async (msg, match) => {
   bot.sendMessage(chatId, firstText, { parse_mode: 'Markdown' });
 
   const res = await getFilmList(fridayDate);
-  const str = `В прокате кинотеатра Multiplex, в пятницу, представлены следующие фильмы:${getFormatedFilms(afterEleven(res.content))} `;
+  const src = '';
+  if (((res || {}).content || []).length) {
+    str = `В прокате кинотеатра Multiplex, в пятницу, представлены следующие фильмы:${getFormatedFilms(afterEleven(res.content))}`;
+  } else {
+    str = `В данный момент список фильмов не доступен😕`;
+  }
   bot.sendMessage(chatId, str, { parse_mode: 'Markdown' });
 });
 
-console.log('>>>>>>>>>>Bot started<<<<<<<<<<')
-console.log('currentDate', currentDate)
 console.log('>>>>>>>>>>Bot started<<<<<<<<<<')
